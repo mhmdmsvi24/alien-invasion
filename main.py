@@ -9,7 +9,7 @@ def run_game() -> None:
     pygame.init()
 
     setting = Settings()
-
+    
     screen = pygame.display.set_mode((setting.screen_width, setting.screen_height))
     pygame.display.set_caption("Alien Invasion")
 

@@ -25,7 +25,7 @@ class Ship:
         self.moving_bottom = False
 
     def update(self):
-        """Updates the shop pos based on movement flags for continous movment"""
+        """Updates the ship position based on movement flags for continous movment"""
         if self.moving_right and self.rect.right < self.screen_rect.right:
             self.rect.x += self.movement_speed
         elif self.moving_left and self.rect.left > self.screen_rect.left:
