@@ -24,6 +24,9 @@ class Ship:
         self.moving_top = False
         self.moving_bottom = False
 
+        # attacking mechanism
+        self.mag_size = 50
+
     def update(self):
         """Updates the ship position based on movement flags for continous movment"""
         if self.moving_right and self.rect.right < self.screen_rect.right:

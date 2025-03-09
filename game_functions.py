@@ -61,6 +61,9 @@ def update_screen(settings, screen, ship, bullets):
 
     # Redraw all bullets infront of the ship
     for bullet in bullets.sprites():
-        bullet.draw_bullet()
+        if len(bullets.sprites()) <= ship.mag_size:
+            bullet.draw_bullet()
+        else:
+            print("Insuficient rounds")
 
     pygame.display.flip()
