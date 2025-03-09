@@ -11,6 +11,9 @@ class Ship:
 
         self.screen_rect = screen.get_rect()
 
+        bullet_rect = pygame.Rect(0, 0, 50, 50)
+        pygame.draw.rect(screen, (255, 0, 0), bullet_rect)
+
         # ship position
         self.rect.centery = float(self.screen_rect.centery)
         self.rect.left = float(self.screen_rect.left)
