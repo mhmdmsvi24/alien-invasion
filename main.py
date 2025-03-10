@@ -1,8 +1,8 @@
-import pygame  # type: ignore
+import pygame
 from pygame.sprite import Group
 
 import game_functions as gf
-from graphics.bullet_rounds import BulletRounds
+from bullet_info import BulletInfo
 from settings import Settings
 from ship import CargoShip
 
@@ -15,15 +15,19 @@ def run_game() -> None:
     screen = pygame.display.set_mode((settings.screen_width, settings.screen_height))
     pygame.display.set_caption("Alien Invasion")
 
+    screen_rect = screen.get_rect()
+
     ship = CargoShip(screen)
     bullets = Group()
-    bullet_graphic = BulletRounds(screen, ship.mag_size)
+
+    bullets_info = BulletInfo(screen, ship.mag_size, ship.bullets_fired)
 
     while True:
-        gf.check_events(settings, screen, ship, bullets, bullet_graphic)
+        gf.check_events(settings, screen, ship, bullets, bullets_info)
         ship.update()
         bullets.update()
-        gf.update_screen(settings, screen, ship, bullets, bullet_graphic)
+        gf.clean_bullets(bullets, screen_rect)
+        gf.update_screen(settings, screen, ship, bullets, bullets_info)
 
 
 if __name__ == "__main__":

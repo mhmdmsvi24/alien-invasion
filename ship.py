@@ -28,7 +28,8 @@ class Ship:
         self.moving_bottom = False
 
         # attacking mechanism
-        self.mag_size = 50
+        self.mag_size = 10
+        self.bullets_fired = 0
 
     def update(self):
         """Updates the ship position based on movement flags for continous movment"""

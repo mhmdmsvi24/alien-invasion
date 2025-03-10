@@ -3,7 +3,6 @@ import sys
 import pygame
 
 from bullet import Bullet
-from graphics.bullet_rounds import BulletRounds
 
 
 def ship_keydown(ship, event) -> None:
@@ -24,13 +23,30 @@ def ship_keyup(ship):
     ship.moving_right = False
 
 
-def ship_mousedown(ship, settings, screen, bullets, bullet_graphic):
-    new_bullet = Bullet(settings, screen, ship)
-    bullets.add(new_bullet)
-    bullet_graphic.mag = ship.mag_size - len(bullets.sprites())
+def clean_bullets(bullets, screen_rect):
+    # Get rid of bullets that have disappeared.
+    for bullet in bullets.copy():
+        if bullet.rect.right > screen_rect.right:
+            bullets.remove(bullet)
 
 
-def check_events(settings, screen, ship, bullets, bullet_graphic):
+def fire_bullets(ship, settings, screen, bullets, bullets_info):
+    """Manages the number of bullets shot based on the ships available ammunation"""
+    if ship.bullets_fired < ship.mag_size:
+        ship.bullets_fired += 1
+        print(ship.bullets_fired, ship.mag_size)
+        new_bullet = Bullet(settings, screen, ship)
+        bullets.add(new_bullet)
+
+        bullets_left = ship.mag_size - ship.bullets_fired
+        bullets_info.update(bullets_left)
+
+
+def ship_mousedown(ship, settings, screen, bullets, bullets_info):
+    fire_bullets(ship, settings, screen, bullets, bullets_info)
+
+
+def check_events(settings, screen, ship, bullets, bullets_info):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
@@ -47,29 +63,19 @@ def check_events(settings, screen, ship, bullets, bullet_graphic):
             ship_keyup(ship)
         # ship mouse events for attacks, etc
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            ship_mousedown(ship, settings, screen, bullets, bullet_graphic)
+            ship_mousedown(ship, settings, screen, bullets, bullets_info)
 
 
-# Every thing that need to be displayed
-def update_screen(settings, screen, ship, bullets, bullet_graphic):
-    bg_image = pygame.image.load(settings.bg_image)
-
-    # scales bg image to fit window
-    bg_image = pygame.transform.scale(
-        bg_image, (settings.screen_width, settings.screen_height)
-    )
-
-    screen.blit(bg_image, (0, 0))
+def update_screen(settings, screen, ship, bullets, bullets_info):
+    """Everything that needs to be updated on each FPS"""
+    screen.blit(settings.bg_image, (0, 0))
 
     # graphics
     ship.blitme()
-    bullet_graphic.blitme()
+    bullets_info.blitme()
 
     # Redraw all bullets infront of the ship
     for bullet in bullets.sprites():
-        if len(bullets.sprites()) <= ship.mag_size:
-            bullet.draw_bullet()
-        else:
-            print("Insuficient rounds")
+        bullet.draw_bullet()
 
     pygame.display.flip()

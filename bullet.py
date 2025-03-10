@@ -9,10 +9,9 @@ class Bullet(Sprite):
         super().__init__()
         self.screen = screen
 
-        # Create bullet rect and position it at ship's right edge
         self.rect = pygame.Rect(0, 0, settings.bullet_width, settings.bullet_height)
-        self.rect.centery = ship.rect.centery  # Align bullet with ship's center
-        self.rect.left = ship.rect.right  # Position bullet in front of the ship
+        self.rect.centery = ship.rect.centery
+        self.rect.left = ship.rect.right
 
         self.x = float(self.rect.x)
         self.color = settings.bullet_color
@@ -20,7 +19,7 @@ class Bullet(Sprite):
 
     def update(self):
         """Update bullet position on screen based on ship position"""
-        self.x += self.speed_factor  # Move bullet to the right
+        self.x += self.speed_factor
         self.rect.x = self.x
 
     def draw_bullet(self):
